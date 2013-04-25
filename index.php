@@ -10,9 +10,9 @@ $useage = '
  参数错误!!!(如果确认参数没有错,请检查程序是否有新版本)
 
   使用方法:
-  单文件:     baidu.php?/show|get/shareid/uk[/文件名.扩展名]
-  文件夹:     baidu.php?/show|get/shareid/uk/文件夹路径/文件索引[/文件名.扩展名]
-  文件夹遍历: baidu.php?/folder/shareid/uk/文件夹路径/
+  单文件:     index.php?/show|get/shareid/uk[/文件名.扩展名]
+  文件夹:     index.php?/show|get/shareid/uk/文件夹路径/文件索引[/文件名.扩展名]
+  文件夹遍历: index.php?/folder/shareid/uk/文件夹路径/
 
 			show为显示下载链接(给下载工具调用),get为直接重定向到文件(伪静态文件,可作音乐/视频在线播放用)
 			文件夹遍历是把该目录下所有下载链接揪出来的(给下载工具调用)
@@ -26,11 +26,11 @@ $useage = '
   原链接为
         http://pan.baidu.com/share/link?shareid=322284&uk=1963222956
   获取真实地址为
-        http://server/baidu.php?/show/322284/1963222956
+        http://server/index.php?/show/322284/1963222956
   外链地址为
-        http://server/baidu.php?/get/322284/1963222956
+        http://server/index.php?/get/322284/1963222956
    或者可以添加任意文件名,如
-        http://server/baidu.php?/get/322284/1963222956/1.mp3
+        http://server/index.php?/get/322284/1963222956/1.mp3
 
 -------------------------------========================================++++++++++++++++++++++++++++++++++++++++++++++++++========================================-------------------------------
 
@@ -40,11 +40,11 @@ $useage = '
   原链接为
         http://pan.baidu.com/share/link?shareid=166708&uk=419822042#dir/path=%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83
   获取真实地址为
-        http://server/baidu.php?/show/166708/419822042/%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83/1          (第1个文件填1,第二个填2,如此类推)
+        http://server/index.php?/show/166708/419822042/%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83/1          (第1个文件填1,第二个填2,如此类推)
   外链地址为
-        http://server/baidu.php?/show/166708/419822042/%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83/1          (第1个文件填1,第二个填2,如此类推)
+        http://server/index.php?/show/166708/419822042/%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83/1          (第1个文件填1,第二个填2,如此类推)
    或者可以添加任意文件名,如
-        http://server/baidu.php?/show/166708/419822042/%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83/1/1.rar    (第1个文件填1,第二个填2,如此类推)
+        http://server/index.php?/show/166708/419822042/%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83/1/1.rar    (第1个文件填1,第二个填2,如此类推)
 
 -------------------------------========================================++++++++++++++++++++++++++++++++++++++++++++++++++========================================-------------------------------
 
@@ -54,13 +54,13 @@ $useage = '
   原链接为
         http://pan.baidu.com/share/link?shareid=166708&uk=419822042#dir/path=%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83
   获取真实地址为
-        http://server/baidu.php?/folder/166708/419822042/%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83/           (第1个文件填1,第二个填2,如此类推)
+        http://server/index.php?/folder/166708/419822042/%2F%E5%9B%BA%E4%BB%B6%2Ftomato%E7%BD%91%E9%80%9F%E4%BC%98%E5%8C%96%2F%E5%85%B6%E5%AE%83/           (第1个文件填1,第二个填2,如此类推)
 
 -------------------------------========================================++++++++++++++++++++++++++++++++++++++++++++++++++========================================-------------------------------
 
 </pre>项目主页 <a href="https://github.com/tofuliang/baidu-pan-proxy">https://github.com/tofuliang/baidu-pan-proxy</a>
 ';
-$localVersion = '0.1';
+$localVersion = '0.3';
 $checkFrequency = 86400; // 每隔多少秒到服务器检测更新,默认是一天
 
 if (checkNew ( $localVersion, $checkFrequency ))
