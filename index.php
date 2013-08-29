@@ -2,7 +2,7 @@
 // STARTOFFILE
 
 // URL的正则
-$url = '/http:\/\/pan\.baidu\.com.*(?:shareid=(\d+)&(?:uk=(\d+?)))/Uis';
+$url = '/(?:http:\/\/(?:pan|yun)\.baidu\.com.*(?:uk=(\d+)&(?:shareid=(\d+?)))|http:\/\/(?:pan|yun)\.baidu\.com.*(?:shareid=(\d+)&(?:uk=(\d+?))))(?#shareid和uk位置可能互换)/Uis';
 
 // 文件夹的正则
 $folder = '/\/(get|show|folder)\/(\d+)\/(\d+)\/(.+)(?:\/(\d+)[\/]((?:.+)\.(?:.+?))|\/(\d+?)[\/]{0,1}|\/)/Uis';
@@ -31,6 +31,7 @@ class BaiduPanProxy{
     private $preg=array();
     // public $trueLinkPreg='|(http:[\\\/]{2,6}www\.baidupcs\.com[\\\/]{1,3}file[\\\/]{1,3}.*)\\\"|U'; //已失效
     public $trueLinkPreg='|(http:[\\\/]{2,6}d\.pcs\.baidu\.com[\\\/]{1,3}file[\\\/]{1,3}.*)\\\"|U';
+    public $trueLinkPregFix='|(http:.*expires=\dh.*)\\\"|U';
 
     public function __construct($url,$preg) {
         $this->url = $url;
@@ -41,7 +42,6 @@ class BaiduPanProxy{
             if(0 != preg_match ( $value, $this->url, $match )){
                 switch ($k) {
                     case 'url':
-                        list ( , $this->shareid, $this->uk) = $match;
                         $this->method='get';//此情况下默认是get,不能自定义
                         $this->matchBy='url';
                         break;
@@ -121,13 +121,23 @@ class BaiduPanProxy{
             $this->realLink = $this->digFolder($this->path,$this->shareid ,$this->uk);
         }else{
             if(!$this->path){
-                $url = "http://pan.baidu.com/share/link?shareid=" . $this->shareid . "&uk=" . $this->uk;
-                $html = file_get_contents ( $url );
-                if (0 == preg_match ( $this->trueLinkPreg, $html, $url ))
+	   $html = file_get_contents ( $this->url );
+                if (0 == preg_match_all ( $this->trueLinkPreg, $html, $url ))
                     $this->error();
-                $_string = array ("replace" => Array ("&amp;", '\\' ), "string" => Array ("&", "" ) );
+                //去掉匹配到的重复项
+                $url = array_unique($url);
+                $url = array_unique($url[0]);
+                foreach ($url as $value) {
+                    //如果匹配到多个链接,从中选择有效时长短的一个
+                    if( 0 != preg_match($this->trueLinkPregFix, $value))
+                        $this->realLink = $value;
+                }
+                if(!$this->realLink)
+                   $this->error();
+
                 // 替换转义字符
-                $this->realLink = str_ireplace ( $_string ["replace"], $_string ["string"], $url [1] );
+                $_string = array ("replace" => Array ("&amp;", '\\' ), "string" => Array ("&", "" ) );
+                $this->realLink = str_ireplace ( $_string ["replace"], $_string ["string"], $this->realLink);
             }elseif ($this->path) {
                 $this->searchFolder();
                 $this->realLink=$this->json['list'][$this->folderIndex]['dlink'];
@@ -160,14 +170,14 @@ class BaiduPanProxy{
     public function updateFile($localVersion) {
         $new = ( string ) @file_get_contents ( "https://raw.github.com/tofuliang/baidu-pan-proxy/master/index.php" );
         if (strpos ( $new, 'STARTOFFILE' ) && strpos ( $new, 'ENDOFFILE' )) {
-            copy ( __FILE__, __FILE__ . $localVersion ) && @file_put_contents ( __FILE__, $new ) && exit ( "代理程序已更新到新版" );
+            copy ( __FILE__, __FILE__ .'.'. $localVersion ) && @file_put_contents ( __FILE__, $new ) && exit ( "代理程序已更新到新版" );
         }
     }
 
 
 }
 $link = new BaiduPanProxy($_SERVER ["QUERY_STRING"],$preg);
-$link->localVersion = '0.6';
+$link->localVersion = '0.8';
 $link->checkFrequency = 86400; // 每隔多少秒到服务器检测更新,默认是一天
 $link->haveFun();
 //ENDOFFILE
