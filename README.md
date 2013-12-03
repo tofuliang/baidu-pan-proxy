@@ -81,3 +81,9 @@ index.php?/pic/`shareid`/`uk`/`文件夹路径`/c`输出图片宽度`u`输出图
 ```js
 javascript: void((function() { var tmpurl, srcurl = location.href; tmpurl = srcurl.replace('pan.baidu.com/share', 'server/index.php').replace('/link?', '/?/get').replace('shareid=', '\/').replace('&uk=', '\/').replace('#dir/path=', '\/'); var name=prompt('请右键复制URL，或者点击确定直接下载',tmpurl); if(name!=null && name!='') window.open(tmpurl,'');})())
 ```
+#####更新
+V0.9
+跟进百度网盘改版,特殊代理模式支持短链接
+百度已经会用验证码限制,能否获取真实地址看RP
+不建议遍历输出文件夹所有链接,成功率极低,同时可能导致该IP长时间需要验证码.
+作图床使用的,建议使用`输出图片可调质量图片模式`,因为百度需要输出预览图,以后改版,这处改动应该不大.不过图片质量稍有损失.
