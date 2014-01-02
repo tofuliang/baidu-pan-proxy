@@ -17,7 +17,7 @@
     $picName = '/\/pic\/(\d+)(?#shareid)\/(\d+)(?#uk)\/(.+)(?#path)\/(c\d+?)(u\d+?)q(\d+?)(?#图片参数)\/(.+?)(?#文件名)/Uis';
 
     $shortUrl = '/(http:\/\/(?:pan|yun)\.baidu\.com\/s\/.*)/Uis';
-    $preg = array ( 'url' => $url, 'folder' => $folder, 'file' => $file, 'picName' => $picName, 'shortUrl' => $shortUrl, 'fileName' => $fileName );
+    $preg     = array ( 'url' => $url, 'folder' => $folder, 'file' => $file, 'picName' => $picName, 'shortUrl' => $shortUrl, 'fileName' => $fileName );
 
     class BaiduPanProxy {
         private $uk;
@@ -310,12 +310,12 @@
             preg_match ( '/(\{\"errno\".*\})/', $this->html, $matches );
             $this->dlink = json_decode ( $matches[1] );
 
-            return $this->dlink = $this->dlink->dlink ? $this->dlink->dlink : NULL;
+            return $this->dlink = $this->dlink->dlink ? $this->dlink->dlink : isset( $this->json['list'][$this->folderIndex]['thumbs']['url3'] ) ? preg_replace ( "/size=c\d+_u\d+&quality=\d+/", 'size=c9999_u9999&quality=100', $this->json['list'][$this->folderIndex]['thumbs']['url3'] ) : NULL;
         }
     }
 
-    $link = new BaiduPanProxy( $_SERVER ["QUERY_STRING"], $preg );
-    $link->localVersion = '0.9';
+    $link                 = new BaiduPanProxy( $_SERVER ["QUERY_STRING"], $preg );
+    $link->localVersion   = '0.91';
     $link->checkFrequency = 86400; // 每隔多少秒到服务器检测更新,默认是一天
     $link->haveFun ();
     //ENDOFFILE
